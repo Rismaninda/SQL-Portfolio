@@ -8,12 +8,12 @@ from shopping_trends st
 group by "Customer ID" 
 order by 2 desc;
 
---Total customer by Gender
+--Total customer by Gender--
 select 
 (select count(*) from shopping_trends st where "Gender" ='Male') as Male,
 (select count(*) from shopping_trends where "Gender"='Female') as Female;
 
--- Total Amount by Gender
+-- Total purchases by Gender
 select "Gender" ,
 sum("Purchase Amount (USD)") as total_amount from shopping_trends st 
 group by "Gender" 
@@ -24,7 +24,7 @@ select "Category" ,
 count(*) as Total from shopping_trends st 
 group by "Category" ;
 
--- Total Amount by Category
+-- Total purchases by Category
 select "Category" ,
 sum("Purchase Amount (USD)") as total_amount from shopping_trends st 
 group by "Category" 
@@ -36,7 +36,7 @@ count(*) as Total from shopping_trends st
 group by "Season" 
 order by Total desc;
 
--- Total Amount by Season
+-- Total purchases by Season
 select "Season" ,
 sum("Purchase Amount (USD)") as total_amount from shopping_trends st 
 group by "Season" 
@@ -49,7 +49,7 @@ where "Season" ='Fall'
 group by 1
 order by 2 desc;
 
--- Amount Customer by Frequency of Purchases
+--Customer purchases by Frequency of Purchases
 select "Frequency of Purchases" ,
 sum("Purchase Amount (USD)") as total_amount, 
 count(*) as Total from shopping_trends st 
@@ -70,7 +70,7 @@ group by "Age","Category" ,"Frequency of Purchases"
 order by 2 desc;
 
 
--- TOP 5 Favorite Color by Season (Top 4 per Season) --
+-- TOP 5 Favorite Color by Season--
 WITH ranked_color AS (
   SELECT 
     "Color", 
@@ -93,7 +93,7 @@ group by "Item Purchased" ,"Season" )
 select * from item
 where fav<=5;
 
--- TOP 5 Favorite Color by gender (Top 4 per Season) --
+-- TOP 3 Favorite Color by gender (Top 4 per Season) --
 WITH ranked_color AS (
   SELECT 
     "Color", "Gender" , 
@@ -115,7 +115,7 @@ group by "Item Purchased" ,"Gender" )
 select * from item
 where fav<=5;
 
---Size by gender--
+--Favorit Size by gender--
 with size as
 (select st."Size" ,st."Gender" ,count(*) as total,
 rank() over(partition by st."Gender"  order by count(*) desc) as fav
@@ -124,7 +124,7 @@ group by st."Size" ,st."Gender" )
 select * from size
 where fav=1;
 
---Item per size--
+--Favorite Item per size--
 with item as 
 (select st."Size" ,st."Item Purchased" ,COUNT(*) as total,
 rank() over(partition by st."Item Purchased" order by COUNT(*) desc) as fav
